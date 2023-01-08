@@ -1,0 +1,24 @@
+# Use postgres/example user/password credentials
+version: "3.9"
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:13.3
+    environment:
+      POSTGRES_DB: "taskmgr"
+      POSTGRES_USER: "taskmgr"
+      POSTGRES_PASSWORD: "taskmgr"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+#      POSTGRES_INITDB_ARGS: "--locale=en_US.utf8"
+
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+      - .:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
