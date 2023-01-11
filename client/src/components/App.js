@@ -85,6 +85,7 @@ const store=new Store();
 export default function App() {
 
   const { token, setToken } = useToken();
+
   const login=(typeof(token)==="string")?JSON.parse(token):token;
   store.login=login;
   if(!login.loggedIn) {
@@ -104,6 +105,8 @@ export default function App() {
           <Route path="/"element={<Tasks store={store}/>}/>
         </Routes>
       </BrowserRouter>
+
+        
     </div>
   );
 }

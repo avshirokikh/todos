@@ -1,3 +1,5 @@
 .overdue { background-color: red; }
 .running { background-color: gray; }
 .complete { background-color: green; }
+
+.task-list-item { border:1px solid black !important; padding: 0px !important; cursor:pointer;}

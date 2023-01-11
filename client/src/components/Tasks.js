@@ -5,9 +5,11 @@ import Task from './Task';
 
 import '../css/Tasks.css';
 
+
 const Tasks = observer(({store}) => {
   if (store==null) return;
   if (store.tasks==null) return;
+
 
   function active(type){
     return store.tasksType==type?"active-tasks-type":""

@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import '../css/Task.css';
 
-const Task = (props) => {
-//  console.log(props);
+import TaskEditor from './TaskEditor';
 
-  const {title, priority, dt_due, resp_name, status, overdue}=props.data;
+function formatDateTimeInput(date)
+{
+  const d=new Date(date);
+  d.setMinutes(d.getMinutes()-d.getTimezoneOffset());
+  return d.toISOString().slice(0,16);
+}
 
+function formatDateTime(date)
+{
   const options = {
 //    era: 'long',
     year: 'numeric',
@@ -18,15 +24,63 @@ const Task = (props) => {
     minute: 'numeric',
 //    second: 'numeric'
   };
+  return new Date(date).toLocaleDateString("ru-RU", options).replace(", ", " ");
+}
 
+const Task = (props) => {
+//  console.log(props);
+
+  const [ TaskEditorVisible, setTaskEditorVisible ] = useState(false);
+
+  const {title, priority, dt_due, resp_name, status, overdue}=props.data;
+
+  let due_date=formatDateTimeInput(dt_due);//new Date(dt_due).toISOString().substring(0,16).replace('T', ' ');;//
+  //due_date=new Date(dt_due).toLocaleDateString("ru-RU", options).replace(", ", "T");
+//  due_date="2023-01-10 17:53";
   return (
-    <div className="task-list-item container p-3 my-3 border row  ">
+  <div>
+
+      <TaskEditor visible={TaskEditorVisible} setVisible={setTaskEditorVisible} >
+        <form>
+          <table>
+            <tbody>
+            <tr><td colSpan="2"><h2>Редактор задачи</h2><hr/></td></tr>
+            <tr><td>Заголовок</td><td><input type="text" id="title" defaultValue={title}/></td></tr>
+            <tr><td>Описание</td><td><input type="text" id="description" defaultValue={props.data.description}/></td></tr>
+            <tr><td>Дата окончания </td><td><input type="datetime-local" id="due_to" defaultValue={formatDateTimeInput(dt_due)}/></td></tr>
+            <tr><td>Приоритет</td><td>
+              <input type="text" id="priority" defaultValue={props.data.priority}/>
+            </td></tr>
+            <tr><td>Статус</td><td>
+<input type="text" id="status" defaultValue={props.data.status}/>
+                <select id="staus" name="status" value={props.data.status}>
+                  <option value="0">к выполнению</option>
+                  <option value="1">выполняется</option>
+                  <option value="2">выполнена</option>
+                  <option value="3">отменена</option>
+                </select>
+            </td></tr>
+
+            </tbody>
+          </table>
+        </form>
+      </TaskEditor>
+
+    <div className="task-list-item container p-3 my-3 border row  " onClick={()=>setTaskEditorVisible(true)}>
       <div className={"task-list-item-title col-sm-12", overdue?"overdue":(status>1?"complete":"running")} > {title} </div>
       <div className="task-list-item-priority col-sm-4 ">Приоритет: {["низкий","средний","высокий"][priority]} </div>
-      <div className="task-list-item-due col-sm-4 "> Срок: {new Date(dt_due).toLocaleDateString("ru-RU", options)} </div>
+      <div className="task-list-item-due col-sm-4 "> Срок: {formatDateTime(dt_due)} </div>
       <div className="task-list-item-status col-sm-4 ">Статус: {["к выполнению", "выполняется", "выполнена", "отменена"][status]} </div>
-      <div className="task-list-item-resp col-sm-12 ">Ответственный: {resp_name} </div>
+      <div className="task-list-item-resp col-sm-10 ">Ответственный: {resp_name} </div>
+      <div className="col-sm-2 " style={{textAlign:'right'}}>
+{/*        
+<button onClick={()=>setTaskEditorVisible(true)} style={{border: '1px solid black',borderRadius: '5px'}}>
+          Изменить
+        </button>
+*/}
+      </div>
     </div>
+  </div>
   );
 }
 
