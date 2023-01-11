@@ -149,10 +149,14 @@ INSERT INTO public.tasks (id, title, description, dt_due, dt_created, dt_modifie
 (DEFAULT, 'User 2_2 Task4', 'User 2_2 Task2', '2023-02-05 23:49:18.000000', DEFAULT, DEFAULT, 2, 0, 7, 7);
 
 CREATE VIEW tasks_ex as 
-	select a.*, 
-		b.pid mgr_id,
-		b.id resp_id, 
-		trim(replace(concat(b.ln, ' ', b.fn, ' ', b.mn), '  ', ' ')) resp_name, 
-		case when dt_due<CURRENT_DATE + 1 then 1 when dt_due<CURRENT_DATE + 7 then 2 else 3 end cat, 
-		case when dt_due<NOW() then 1 else 0 end overdue 
-	from tasks a left join users b on coalesce(assigned_to,owner)=b.id ;
+  select a.*, 
+    b.pid mgr_id,
+    b.id resp_id, 
+    trim(replace(concat(b.ln, ' ', b.fn, ' ', b.mn), '  ', ' ')) resp_name, 
+    case when dt_due<CURRENT_DATE + 1 then 1 when dt_due<CURRENT_DATE + 7 then 2 else 3 end cat, 
+    case when dt_due<NOW() then 1 else 0 end overdue 
+  from tasks a left join users b on coalesce(assigned_to,owner)=b.id ;
+
+CREATE VIEW users_ex as 
+  select *, trim(replace(concat(ln, ' ', fn, ' ', mn), '  ', ' ')) cn from users;
+
