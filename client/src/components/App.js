@@ -31,6 +31,9 @@ class Store {
   tasks = [];
   tasksType = 1;
 
+  подчиненные = [];
+  
+
   login = null;
 
   constructor() {
@@ -42,6 +45,7 @@ class Store {
       setTasks: action,
       setTasksType: action,
     })
+
   }
 
   get tasksTitle(){
@@ -78,6 +82,16 @@ class Store {
     this.tasks=value;
   }
 
+  загрузитьПодчиненных() {
+    if (this.login==null) 
+      return;
+
+    fetch(`http://localhost:5000/user_tasks/${this.login.id}`)
+      .then((resp)=>resp.json())
+      .then((json)=>{this.setTasks(json);});
+  }
+  
+
 }
 
 const store=new Store();
@@ -94,6 +108,7 @@ export default function App() {
 
 
   store.loadTasks(1);
+  store.загрузитьПодчиненных(1);
 
   return (
     <div className="wrapper container-fluid">

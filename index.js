@@ -79,7 +79,8 @@ app.get("/task/:id", async (req, res) => {
 app.get("/subordinates/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const data = await pool.query("select id, trim(replace(concat(ln,' ',fn,' ',mn), '  ', ' ')) fio from users where pid=$1", [id])
+        console.log(id);
+        const data = await pool.query("select id, cn, case when id=$1 then 1 else 2 end o from users_ex where pid=$1 or id=$1 order by o,cn", [id])
         res.json(data.rows)
     } catch (error) {
         console.error(error.message)

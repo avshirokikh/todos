@@ -35,32 +35,51 @@ const Task = (props) => {
   const {title, priority, dt_due, resp_name, status, overdue}=props.data;
 
   let due_date=formatDateTimeInput(dt_due);//new Date(dt_due).toISOString().substring(0,16).replace('T', ' ');;//
-  //due_date=new Date(dt_due).toLocaleDateString("ru-RU", options).replace(", ", "T");
-//  due_date="2023-01-10 17:53";
+
+  const saveTask = (e) => {
+      e.preventDefault();
+//      console.log(e);
+      const formData=new FormData(e.target.form);
+      const items={}
+      for(let [name, value] of formData) {
+        items[name]=value
+      }
+      console.log(JSON.stringify(items));
+    }
   return (
   <div>
 
       <TaskEditor visible={TaskEditorVisible} setVisible={setTaskEditorVisible} >
         <form>
+          <input type="hidden" name="id" defaultValue={props.data.id}/>
           <table>
             <tbody>
             <tr><td colSpan="2"><h2>Редактор задачи</h2><hr/></td></tr>
-            <tr><td>Заголовок</td><td><input type="text" id="title" defaultValue={title}/></td></tr>
-            <tr><td>Описание</td><td><input type="text" id="description" defaultValue={props.data.description}/></td></tr>
-            <tr><td>Дата окончания </td><td><input type="datetime-local" id="due_to" defaultValue={formatDateTimeInput(dt_due)}/></td></tr>
+            <tr><td>Заголовок</td><td><input type="text" name="title" defaultValue={title}/></td></tr>
+            <tr><td>Описание</td><td>
+              <textarea name="description" defaultValue={props.data.description}  />
+            </td></tr>
+            <tr><td>Дата окончания </td><td><input type="datetime-local" name="due_to" defaultValue={formatDateTimeInput(dt_due)}/></td></tr>
             <tr><td>Приоритет</td><td>
-              <input type="text" id="priority" defaultValue={props.data.priority}/>
+                <select id="priority" name="priority" defaultValue={props.data.priority}>
+                  <option value="0">низкий</option>
+                  <option value="1">средний</option>
+                  <option value="2">высокий</option>
+                </select>
             </td></tr>
             <tr><td>Статус</td><td>
-<input type="text" id="status" defaultValue={props.data.status}/>
-                <select id="staus" name="status" value={props.data.status}>
+                <select name="status" defaultValue={props.data.status}>
                   <option value="0">к выполнению</option>
                   <option value="1">выполняется</option>
                   <option value="2">выполнена</option>
                   <option value="3">отменена</option>
                 </select>
             </td></tr>
-
+            <tr><td colSpan="2" align="right">
+              <button onClick={(e)=>{saveTask(e)}}>сохранить</button>
+              <button onClick={()=>setTaskEditorVisible(false)}>Отмена</button>
+            </td></tr>
+            
             </tbody>
           </table>
         </form>
