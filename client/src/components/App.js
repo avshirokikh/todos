@@ -44,6 +44,8 @@ class Store {
 
       setTasks: action,
       setTasksType: action,
+      подчиненные: observable,
+      установитьПодчиненных: action,
     })
 
   }
@@ -82,13 +84,17 @@ class Store {
     this.tasks=value;
   }
 
+  установитьПодчиненных(value){
+    this.подчиненные=value;
+  }
+
   загрузитьПодчиненных() {
     if (this.login==null) 
       return;
 
-    fetch(`http://localhost:5000/user_tasks/${this.login.id}`)
+    fetch(`http://localhost:5000/subordinates/${this.login.id}`)
       .then((resp)=>resp.json())
-      .then((json)=>{this.setTasks(json);});
+      .then((json)=>{this.установитьПодчиненных(json);});
   }
   
 
@@ -108,7 +114,7 @@ export default function App() {
 
 
   store.loadTasks(1);
-  store.загрузитьПодчиненных(1);
+  store.загрузитьПодчиненных();
 
   return (
     <div className="wrapper container-fluid">

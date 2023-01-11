@@ -33,6 +33,7 @@ const Task = (props) => {
   const [ TaskEditorVisible, setTaskEditorVisible ] = useState(false);
 
   const {title, priority, dt_due, resp_name, status, overdue}=props.data;
+  const подчиненые=props.store.подчиненные;
 
   let due_date=formatDateTimeInput(dt_due);//new Date(dt_due).toISOString().substring(0,16).replace('T', ' ');;//
 
@@ -69,6 +70,18 @@ const Task = (props) => {
             </td></tr>
             <tr><td>Статус</td><td>
                 <select name="status" defaultValue={props.data.status}>
+                  <option value="0">к выполнению</option>
+                  <option value="1">выполняется</option>
+                  <option value="2">выполнена</option>
+                  <option value="3">отменена</option>
+                </select>
+            </td></tr>
+            <tr><td>Ответственныей</td><td>
+                <select name="resp_id" defaultValue={props.data.resp_id}>
+                  {
+                    props.store.подчиненные.map((item)=><option value={item.id} key={item.id} >{item.cn}</option>)
+                  }
+                  
                   <option value="0">к выполнению</option>
                   <option value="1">выполняется</option>
                   <option value="2">выполнена</option>

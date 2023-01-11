@@ -24,7 +24,7 @@ const Tasks = observer(({store}) => {
       </div>
 
       {
-        store.tasks.map((item)=><Task data={item} key={item.id}/>)
+        store.tasks.map((item)=><Task data={item} key={item.id} store={store}/>)
       }
     </div>
   );
