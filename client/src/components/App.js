@@ -60,6 +60,22 @@ class Store {
   }
 
                                         
+  saveTask(task)
+  {
+    if (this.login==null) 
+      return;
+
+    return fetch(`http://localhost:5000/save-task/${this.login.id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(task)
+    })
+      .then((resp)=>resp.json())
+      .then((json)=>{this.updateTasks();});
+  }                                        
+
   loadTasks(type){
     this.setTasksType(type);
   }
@@ -83,6 +99,7 @@ class Store {
   setTasks(value){
     this.tasks=value;
   }
+
 
   установитьПодчиненных(value){
     this.подчиненные=value;

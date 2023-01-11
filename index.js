@@ -46,7 +46,7 @@ app.post("/login", async (req, res) => {
 app.post("/chk_login", async (req, res) => {
     try {
         const { user, password } = req.body
-        console.log(req.body)
+        //console.log(req.body)
         //        console.log(password)
         const value = await pool.query("select check_pw($1, $2)", [user, password])
 
@@ -79,7 +79,6 @@ app.get("/task/:id", async (req, res) => {
 app.get("/subordinates/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(id);
         const data = await pool.query("select id, cn, case when id=$1 then 1 else 2 end o from users_ex where pid=$1 or id=$1 order by o,cn", [id])
         res.json(data.rows)
     } catch (error) {
@@ -103,8 +102,6 @@ app.get("/user_tasks/:view/:user", async (req, res) => {
                     "select * from tasks_ex where (status<2 or dt_due>CURRENT_DATE) and mgr_id=$1 order by resp_name, dt_due",
                     [user])
                 res.json(data.rows)
-                console.log(view)
-                res.json(req.params)
                 break
             case "3":
                 data = await pool.query(
@@ -115,6 +112,126 @@ app.get("/user_tasks/:view/:user", async (req, res) => {
         }
     } catch (error) {
         console.error(error.message)
+    }
+})
+
+app.get("/initdb", async (req, res) => {
+      
+      await pool.query("delete from tasks");
+      await pool.query(`
+INSERT INTO public.tasks (id, title, description, dt_due, dt_created, dt_modified, priority, status, owner, assigned_to) VALUES 
+(DEFAULT, 'Dir Task1', 'Dir Task1', NOW(),                      DEFAULT, DEFAULT, 2, 0, 1, 1),
+(DEFAULT, 'Dir Task2', 'Dir Task2', NOW()+interval '2 minutes', DEFAULT, DEFAULT, 2, 0, 1, 1),
+(DEFAULT, 'Dir Task3', 'Dir Task2', NOW()+interval '5 days',    DEFAULT, DEFAULT, 2, 0, 1, 1),
+(DEFAULT, 'Dir Task4', 'Dir Task2', NOW()+interval '1 month',   DEFAULT, DEFAULT, 2, 0, 1, 1),
+(DEFAULT, 'Dir Zam 1 Task1', 'Dir Zam 1 Task1', NOW(),                      DEFAULT, DEFAULT, 2, 0, 1, 2),
+(DEFAULT, 'Dir Zam 1 Task2', 'Dir Zam 1 Task2', NOW()+interval '2 minutes', DEFAULT, DEFAULT, 2, 0, 1, 2),
+(DEFAULT, 'Dir Zam 1 Task3', 'Dir Zam 1 Task2', NOW()+interval '5 days',    DEFAULT, DEFAULT, 2, 0, 1, 2),
+(DEFAULT, 'Dir Zam 1 Task4', 'Dir Zam 1 Task2', NOW()+interval '1 month',   DEFAULT, DEFAULT, 2, 0, 1, 2),
+(DEFAULT, 'Dir Zam 2 Task1', 'Dir Zam 2 Task1', NOW(),                      DEFAULT, DEFAULT, 2, 0, 1, 3),
+(DEFAULT, 'Dir Zam 2 Task2', 'Dir Zam 2 Task2', NOW()+interval '2 minutes', DEFAULT, DEFAULT, 2, 0, 1, 3),
+(DEFAULT, 'Dir Zam 2 Task3', 'Dir Zam 2 Task2', NOW()+interval '5 days',    DEFAULT, DEFAULT, 2, 0, 1, 3),
+(DEFAULT, 'Dir Zam 2 Task4', 'Dir Zam 2 Task2', NOW()+interval '1 month',   DEFAULT, DEFAULT, 2, 0, 1, 3),
+
+(DEFAULT, 'Zam 1 Task1', 'Zam 1 Task1', NOW(),                      DEFAULT, DEFAULT, 2, 0, 2, 2),
+(DEFAULT, 'Zam 1 Task2', 'Zam 1 Task2', NOW()+interval '2 minutes', DEFAULT, DEFAULT, 2, 0, 2, 2),
+(DEFAULT, 'Zam 1 Task3', 'Zam 1 Task3', NOW()+interval '5 days',    DEFAULT, DEFAULT, 2, 0, 2, 2),
+(DEFAULT, 'Zam 1 Task4', 'Zam 1 Task4', NOW()+interval '1 month',   DEFAULT, DEFAULT, 2, 0, 2, 2),
+
+(DEFAULT, 'User 1_1 Zam Task1', 'User 1_1 Zam Task1', NOW(),                       DEFAULT, DEFAULT, 2, 0, 2, 4),
+(DEFAULT, 'User 1_1 Zam Task2', 'User 1_1 Zam Task2', NOW()+interval '2 minutes',  DEFAULT, DEFAULT, 2, 0, 2, 4),
+(DEFAULT, 'User 1_1 Zam Task3', 'User 1_1 Zam Task3', NOW()+interval '5 days',     DEFAULT, DEFAULT, 2, 0, 2, 4),
+(DEFAULT, 'User 1_1 Zam Task4', 'User 1_1 Zam Task4', NOW()+interval '1 month',    DEFAULT, DEFAULT, 2, 0, 2, 4),
+(DEFAULT, 'User 1_2 Zam Task1', 'User 1_2 Zam Task1', NOW(),                       DEFAULT, DEFAULT, 2, 0, 2, 5),
+(DEFAULT, 'User 1_2 Zam Task2', 'User 1_2 Zam Task2', NOW()+interval '2 minutes',  DEFAULT, DEFAULT, 2, 0, 2, 5),
+(DEFAULT, 'User 1_2 Zam Task3', 'User 1_2 Zam Task3', NOW()+interval '5 days',     DEFAULT, DEFAULT, 2, 0, 2, 5),
+(DEFAULT, 'User 1_2 Zam Task4', 'User 1_2 Zam Task4', NOW()+interval '1 month',    DEFAULT, DEFAULT, 2, 0, 2, 5),
+
+(DEFAULT, 'Zam 2 Task1', 'Zam 2 Task1', NOW(),                      DEFAULT, DEFAULT, 2, 0, 3, 3),
+(DEFAULT, 'Zam 2 Task2', 'Zam 2 Task2', NOW()+interval '2 minutes', DEFAULT, DEFAULT, 2, 0, 3, 3),
+(DEFAULT, 'Zam 2 Task3', 'Zam 2 Task3', NOW()+interval '5 days',    DEFAULT, DEFAULT, 2, 0, 3, 3),
+(DEFAULT, 'Zam 2 Task4', 'Zam 2 Task4', NOW()+interval '1 month',   DEFAULT, DEFAULT, 2, 0, 3, 3),
+
+(DEFAULT, 'User 2_1 Zam Task1', 'User 2_1 Zam Task1', NOW(),                      DEFAULT, DEFAULT, 2, 0, 3, 6),
+(DEFAULT, 'User 2_1 Zam Task2', 'User 2_1 Zam Task2', NOW()+interval '2 minutes', DEFAULT, DEFAULT, 2, 0, 3, 6),
+(DEFAULT, 'User 2_1 Zam Task3', 'User 2_1 Zam Task3', NOW()+interval '5 days',    DEFAULT, DEFAULT, 2, 0, 3, 6),
+(DEFAULT, 'User 2_1 Zam Task4', 'User 2_1 Zam Task4', NOW()+interval '1 month',   DEFAULT, DEFAULT, 2, 0, 3, 6),
+(DEFAULT, 'User 2_2 Zam Task1', 'User 2_2 Zam Task1', NOW(),                      DEFAULT, DEFAULT, 2, 0, 3, 7),
+(DEFAULT, 'User 2_2 Zam Task2', 'User 2_2 Zam Task2', NOW()+interval '2 minutes', DEFAULT, DEFAULT, 2, 0, 3, 7),
+(DEFAULT, 'User 2_2 Zam Task3', 'User 2_2 Zam Task3', NOW()+interval '5 days',    DEFAULT, DEFAULT, 2, 0, 3, 7),
+(DEFAULT, 'User 2_2 Zam Task4', 'User 2_2 Zam Task4', NOW()+interval '1 month',   DEFAULT, DEFAULT, 2, 0, 3, 7),
+
+(DEFAULT, 'User 1_1 Task1', 'User 1_1 Task1', NOW(),                      DEFAULT, DEFAULT, 2, 0, 4, 4),
+(DEFAULT, 'User 1_1 Task2', 'User 1_1 Task2', NOW()+interval '2 minutes', DEFAULT, DEFAULT, 2, 0, 4, 4),
+(DEFAULT, 'User 1_1 Task3', 'User 1_1 Task2', NOW()+interval '5 days',    DEFAULT, DEFAULT, 2, 0, 4, 4),
+(DEFAULT, 'User 1_1 Task4', 'User 1_1 Task2', NOW()+interval '1 month',   DEFAULT, DEFAULT, 2, 0, 4, 4),
+                              
+(DEFAULT, 'User 1_2 Task1', 'User 1_2 Task1', NOW(),                      DEFAULT, DEFAULT, 2, 0, 5, 5),
+(DEFAULT, 'User 1_2 Task2', 'User 1_2 Task2', NOW()+interval '2 minutes', DEFAULT, DEFAULT, 2, 0, 5, 5),
+(DEFAULT, 'User 1_2 Task3', 'User 1_2 Task2', NOW()+interval '5 days',    DEFAULT, DEFAULT, 2, 0, 5, 5),
+(DEFAULT, 'User 1_2 Task4', 'User 1_2 Task2', NOW()+interval '1 month',   DEFAULT, DEFAULT, 2, 0, 5, 5),
+                                                                          
+(DEFAULT, 'User 2_1 Task1', 'User 2_1 Task1', NOW(),                      DEFAULT, DEFAULT, 2, 0, 6, 6),
+(DEFAULT, 'User 2_1 Task2', 'User 2_1 Task2', NOW()+interval '2 minutes', DEFAULT, DEFAULT, 2, 0, 6, 6),
+(DEFAULT, 'User 2_1 Task3', 'User 2_1 Task2', NOW()+interval '5 days',    DEFAULT, DEFAULT, 2, 0, 6, 6),
+(DEFAULT, 'User 2_1 Task4', 'User 2_1 Task2', NOW()+interval '1 month',   DEFAULT, DEFAULT, 2, 0, 6, 6),
+                                                                          
+(DEFAULT, 'User 2_2 Task1', 'User 2_2 Task1', NOW(),                      DEFAULT, DEFAULT, 2, 0, 7, 7),
+(DEFAULT, 'User 2_2 Task2', 'User 2_2 Task2', NOW()+interval '2 minutes', DEFAULT, DEFAULT, 2, 0, 7, 7),
+(DEFAULT, 'User 2_2 Task3', 'User 2_2 Task2', NOW()+interval '5 days',    DEFAULT, DEFAULT, 2, 0, 7, 7),
+(DEFAULT, 'User 2_2 Task4', 'User 2_2 Task2', NOW()+interval '1 month',   DEFAULT, DEFAULT, 2, 0, 7, 7);
+`);
+                res.json({ok:true});
+
+})
+app.post("/save-task/:user", async (req, res) => {
+    try {
+        const { user } = req.params;
+        let {id, owner, title, description, due_to, priority, status, resp_id} = req.body
+
+        let chk;
+        chk = await pool.query("select owner, resp_id, mgr_id from tasks_ex where id=$1", [id])
+        old = chk.rows[0];
+
+        if (chk.rowCount != 1){
+          throw("Task not found")
+        }
+
+        if (owner!=user && resp_id!=user && old.mgr_id!=user) {
+          throw("Permission to modify selected task denied: user isn't owner nor is responsible for the task");
+        }
+
+        if (owner!=user) {
+          // ignore the change of responsible user
+          resp_id=old.resp_id
+        } 
+
+        if(old.owner!=owner){
+          throw "Permission to modify selected task denied: changing task owner is not supported";
+        }
+
+        if(old.owner!=user&&old.mgr_id!=user&&old.resp_id!=user){
+          throw "Permission to modify selected task denied: user isn't ownwer nor responsible for the task"
+        }
+
+        chk = await pool.query("select id from users where id=$1 or pid=$2", [user,owner])
+        if (chk.rowCount == 1){
+          throw "Permission to modify selected task denied: new responsible is not subordinate of the caller"
+        }
+        if (user!=owner && user!=old.mgr_id) {
+          // may only modify the status
+          await pool.query("update tasks set status=$2, dt_modified=NOW() where id=$1", [id, status])
+        }else{
+          // may modify all task attributes
+          await pool.query("update tasks set owner=$2, title=$3, description=$4, dt_due=$5, priority=$6, status=$7, assigned_to=$8, dt_modified=NOW() where id=$1", 
+            [id, owner, title, description, due_to, priority, status, resp_id])
+        }
+
+        res.json({error:false})
+        return;
+    } catch (err) {
+        console.error(err)
+        res.json({error:true, message:err})
     }
 })
 

@@ -46,13 +46,18 @@ const Task = (props) => {
         items[name]=value
       }
       console.log(JSON.stringify(items));
+      props.store.saveTask(items);
+      setTaskEditorVisible(false);
+      
     }
+
   return (
   <div>
 
       <TaskEditor visible={TaskEditorVisible} setVisible={setTaskEditorVisible} >
         <form>
           <input type="hidden" name="id" defaultValue={props.data.id}/>
+          <input type="hidden" name="owner" defaultValue={props.data.owner}/>
           <table>
             <tbody>
             <tr><td colSpan="2"><h2>Редактор задачи</h2><hr/></td></tr>
@@ -81,16 +86,11 @@ const Task = (props) => {
                   {
                     props.store.подчиненные.map((item)=><option value={item.id} key={item.id} >{item.cn}</option>)
                   }
-                  
-                  <option value="0">к выполнению</option>
-                  <option value="1">выполняется</option>
-                  <option value="2">выполнена</option>
-                  <option value="3">отменена</option>
                 </select>
             </td></tr>
             <tr><td colSpan="2" align="right">
               <button onClick={(e)=>{saveTask(e)}}>сохранить</button>
-              <button onClick={()=>setTaskEditorVisible(false)}>Отмена</button>
+              <button onClick={(e)=>{e.preventDefault(); setTaskEditorVisible(false);}}>Отмена</button>
             </td></tr>
             
             </tbody>
