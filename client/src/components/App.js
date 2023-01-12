@@ -1,33 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import env from "react-dotenv";
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { observable, computed, configure, action, makeObservable, makeAutoObservable} from 'mobx';
-import { observer } from 'mobx-react';
+import { observable, computed, configure, action, makeObservable} from 'mobx';
 
-
-import Task from './Task';
 import Tasks from './Tasks';
 import Login from './Login';
 import useToken from './useToken';
-import useSWR from 'swr';
-import Test from './Test';
-import TaskEditor from './TaskEditor';
 
 import '../css/App.css';
 
 configure({enforceActions: 'observed' });
-
-async function loginUser(credentials, {setTasks}) {
- return fetch('http://localhost:5000/login', {
-   method: 'POST',
-   headers: {
-     'Content-Type': 'application/json'
-   },
-   body: JSON.stringify(credentials)
- }).then(data => console.log("done",data))
-   
-}
 
 class Store {
   
@@ -192,7 +175,6 @@ export default function App() {
 
   return (
     <div className="wrapper container-fluid">
-    {env.port}
 
       <div className="row">
         <div className="col-sm-6">TODO list</div>
