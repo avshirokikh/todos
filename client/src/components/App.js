@@ -65,7 +65,7 @@ class Store {
     if (this.login==null) 
       return;
 
-    return fetch(`http://localhost:5000/save-task/${this.login.id}`, {
+    return fetch(`${env.API_HOST}/save-task/${this.login.id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -104,7 +104,7 @@ class Store {
       return;
     }
 
-    fetch(`http://localhost:5000/task/${id}`)
+    fetch(`${env.API_HOST}/task/${id}`)
       .then((resp)=>resp.json())
       .then((json)=>{
         this.setTaskEditorData(json);
@@ -131,7 +131,7 @@ class Store {
     if (this.login==null) 
       return;
 
-    fetch(`http://localhost:5000/user_tasks/${this.tasksType}/${this.login.id}`)
+    fetch(`${env.API_HOST}/user_tasks/${this.tasksType}/${this.login.id}`)
       .then((resp)=>resp.json())
       .then((json)=>{this.setTasks(json);});
   }
@@ -149,7 +149,7 @@ class Store {
     if (this.login==null) 
       return;
 
-    fetch(`http://localhost:5000/subordinates/${this.login.id}`)
+    fetch(`${env.API_HOST}/subordinates/${this.login.id}`)
       .then((resp)=>resp.json())
       .then((json)=>{this.установитьПодчиненных(json);});
   }
@@ -162,7 +162,6 @@ const store=new Store();
 export default function App() {
 
   const { token, setToken } = useToken();
-  console.log(token);
   const login=(typeof(token)==="string")?JSON.parse(token):token;
   store.login=login;
   if(!login.loggedIn) {
@@ -175,7 +174,6 @@ export default function App() {
 
   return (
     <div className="wrapper container-fluid">
-
       <div className="row">
         <div className="col-sm-6">TODO list</div>
         <div className="col-sm-6" style={{textAlign:"right"}}>

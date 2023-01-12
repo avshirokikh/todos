@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
+import env from "react-dotenv";
 import PropTypes from 'prop-types';
 
 import '../css/Login.css';
 
 async function loginUser(credentials) {
- return fetch('http://localhost:5000/login', {
-   method: 'POST',
-   headers: {
-     'Content-Type': 'application/json'
-   },
-   body: JSON.stringify(credentials)
- })
-   .then(data => data.json())
+  return fetch(`${env.API_HOST}/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+  .then(data => data.json())
 }
 
 export default function Login({token, setToken }) {
@@ -52,18 +53,19 @@ export default function Login({token, setToken }) {
 
 
   return(
-    <div class="container">
-      <div id="login-row" className="row justify-content-center align-items-center">
+    <div className="container">
+ {env.API_HOST}
+     <div id="login-row" className="row justify-content-center align-items-center">
         <div id="login-column" className="col-md-6">
           <div id="login-box" className="col-md-12">
             <form id="login-form"  className="form" onSubmit={handleSubmit}>
-              <h3 class="text-center text-info">Login</h3>
+              <h3 className="text-center text-info">Login</h3>
               <div className="form-group">
-                <label for="username" className="text-info">Username:</label><br/>
+                <label htmlFor="username" className="text-info">Username:</label><br/>
                 <input type="text" name="username" id="username" className="form-control" onChange={e => setUserName(e.target.value)} defaultValue={username}/>
               </div>
               <div className="form-group">
-                <label for="password" className="text-info">Password:</label><br/>
+                <label htmlFor="password" className="text-info">Password:</label><br/>
                 <input type="password" name="password" id="password" className="form-control" onChange={e => setPassword(e.target.value)} defaultValue={password}/>
               </div>
               <div className="form-group">

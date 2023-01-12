@@ -12,7 +12,6 @@ export default function useToken() {
       console.error(err);
     }
     //console.log(result)
-    console.log(result.error);
     return result
   };
 
