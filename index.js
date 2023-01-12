@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express")
 const app = express()
 const cors = require("cors")
@@ -244,6 +245,10 @@ app.post("/save-task/:user", async (req, res) => {
     }
 })
 
-app.listen(5000, () => {
-    console.log("server has started on port 5000")
+const port = process.env.PORT;
+console.log(`Your port is ${port}`);
+
+
+app.listen(port, () => {
+    console.log(`server has started on port ${port}`)
 })
