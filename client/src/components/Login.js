@@ -54,7 +54,6 @@ export default function Login({token, setToken }) {
 
   return(
     <div className="container">
- {env.API_HOST}
      <div id="login-row" className="row justify-content-center align-items-center">
         <div id="login-column" className="col-md-6">
           <div id="login-box" className="col-md-12">
