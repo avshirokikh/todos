@@ -10,6 +10,7 @@ import Login from './Login';
 import useToken from './useToken';
 import useSWR from 'swr';
 import Test from './Test';
+import TaskEditor from './TaskEditor';
 
 import '../css/App.css';
 
@@ -32,7 +33,6 @@ class Store {
   tasksType = 1;
 
   подчиненные = [];
-  
 
   login = null;
 
@@ -46,6 +46,12 @@ class Store {
       setTasksType: action,
       подчиненные: observable,
       установитьПодчиненных: action,
+
+      taskEditorData:observable,
+      setTaskEditorData: action,
+
+      taskEditorVisible:observable,
+      setTaskEditorVisible:action,
     })
 
   }
@@ -59,7 +65,16 @@ class Store {
     }
   }
 
-                                        
+  taskEditorVisible=false;
+
+  setTaskEditorVisible(value)
+  {
+    this.taskEditorVisible=value;  
+  }
+
+
+  taskEditorData = {};
+
   saveTask(task)
   {
     if (this.login==null) 
@@ -75,6 +90,46 @@ class Store {
       .then((resp)=>resp.json())
       .then((json)=>{this.updateTasks();});
   }                                        
+
+
+  blankTaskEditorData(){
+    const now=new Date();
+    let dueTo = now;
+    dueTo.setDate(dueTo.getDate() + 1);
+
+    return {
+      id: -1,
+      title: "Новая задача",
+      description: "Описание новой задачи",
+      dt_due: dueTo,
+      dt_created: now,
+      dt_modified: now,
+      priority: 1,
+      status: 0,
+      owner: this.login?.id,
+      assigned_to: this.login?.id,
+    }
+  }
+
+  loadTaskEditorData(id)
+  {
+    if(id===-1){
+      this.setTaskEditorData(this.blankTaskEditorData());
+      this.setTaskEditorVisible(true);
+      return;
+    }
+
+    fetch(`http://localhost:5000/task/${id}`)
+      .then((resp)=>resp.json())
+      .then((json)=>{
+        this.setTaskEditorData(json);
+        this.setTaskEditorVisible(true);
+      });
+  }
+
+  setTaskEditorData(value){
+    this.taskEditorData=value;
+  }
 
   loadTasks(type){
     this.setTasksType(type);
@@ -122,7 +177,7 @@ const store=new Store();
 export default function App() {
 
   const { token, setToken } = useToken();
-
+  console.log(token);
   const login=(typeof(token)==="string")?JSON.parse(token):token;
   store.login=login;
   if(!login.loggedIn) {
@@ -135,8 +190,17 @@ export default function App() {
 
   return (
     <div className="wrapper container-fluid">
+      <div className="row">
+        <div className="col-sm-6">TODO list</div>
+        <div className="col-sm-6" style={{textAlign:"right"}}>
+          {login.cn}
+          <button 
+            style={{margin:"2px", border:"none", background:"none", textDecoration:"underline",padding:"0px 2px", fontSize:"10pt"}}
+            onClick={()=>{setToken(null);}}>
+            выйти</button>
+        </div>
+      </div>
       <hr/> 
-      {login.cn}
 {/*      {data.map((item)=><Task data={item} key={item.id}/>)};*/}
       <BrowserRouter>
         <Routes>

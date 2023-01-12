@@ -16,12 +16,19 @@ export default function useToken() {
     return result
   };
 
-  const [token, setToken] = useState(getToken());
+  const value = getToken();
+
+  const [token, setToken] = useState(value);
 
   const saveToken = userToken => {
-    const tokenString=JSON.stringify(userToken);
-    sessionStorage.setItem('token', tokenString);
-    setToken(tokenString);
+    sessionStorage.removeItem('token');
+    if(userToken){
+      const tokenString=JSON.stringify(userToken);
+      sessionStorage.setItem('token', tokenString);
+      setToken(userToken);
+      return;
+    }
+    setToken(getToken());
   };
 
   return {

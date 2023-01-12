@@ -20,8 +20,8 @@ export default function Login({token, setToken }) {
 
   let login=(typeof(token)==="string")?JSON.parse(token):token;
 
-  const [username, setUserName] = useState();
-  const [password, setPassword] = useState();
+  const [username, setUserName] = useState("director");
+  const [password, setPassword] = useState("password");
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -62,11 +62,11 @@ export default function Login({token, setToken }) {
               <h3 class="text-center text-info">Login</h3>
               <div className="form-group">
                 <label for="username" className="text-info">Username:</label><br/>
-                <input type="text" name="username" id="username" className="form-control" onChange={e => setUserName(e.target.value)}/>
+                <input type="text" name="username" id="username" className="form-control" onChange={e => setUserName(e.target.value)} defaultValue={username}/>
               </div>
               <div className="form-group">
                 <label for="password" className="text-info">Password:</label><br/>
-                <input type="password" name="password" id="password" className="form-control" onChange={e => setPassword(e.target.value)}/>
+                <input type="password" name="password" id="password" className="form-control" onChange={e => setPassword(e.target.value)} defaultValue={password}/>
               </div>
               <div className="form-group">
                 <input type="submit" name="submit" className="btn btn-info btn-md" value="submit"/>

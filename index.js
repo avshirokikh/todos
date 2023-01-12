@@ -69,9 +69,10 @@ app.get("/all_tasks", async (req, res) => {
 app.get("/task/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const data = await pool.query("select * from tasks where id=$1", [id])
+        const data = await pool.query("select * from tasks_ex where id=$1", [id])
         res.json(data.rows[0])
     } catch (error) {
+        res.json({error:true, errorMessage:error.message})
         console.error(error.message)
     }
 })
@@ -190,34 +191,42 @@ app.post("/save-task/:user", async (req, res) => {
         let {id, owner, title, description, due_to, priority, status, resp_id} = req.body
 
         let chk;
-        chk = await pool.query("select owner, resp_id, mgr_id from tasks_ex where id=$1", [id])
-        old = chk.rows[0];
 
-        if (chk.rowCount != 1){
-          throw("Task not found")
+        if(id!=-1)
+        {
+          chk = await pool.query("select owner, resp_id, mgr_id from tasks_ex where id=$1", [id])
+          old = chk.rows[0];
+
+          if (chk.rowCount != 1){
+            throw("Task not found")
+          }
+
+          if (owner!=user && resp_id!=user && old.mgr_id!=user) {
+            throw("Permission to modify selected task denied: user isn't owner nor is responsible for the task");
+          }
+
+          if (owner!=user) {
+            // ignore the change of responsible user
+            resp_id=old.resp_id
+          } 
+
+          if(old.owner!=owner){
+            throw "Permission to modify selected task denied: changing task owner is not supported";
+          }
+
+          if(old.owner!=user&&old.mgr_id!=user&&old.resp_id!=user){
+            throw "Permission to modify selected task denied: user isn't ownwer nor responsible for the task"
+          }
         }
-
-        if (owner!=user && resp_id!=user && old.mgr_id!=user) {
-          throw("Permission to modify selected task denied: user isn't owner nor is responsible for the task");
-        }
-
-        if (owner!=user) {
-          // ignore the change of responsible user
-          resp_id=old.resp_id
-        } 
-
-        if(old.owner!=owner){
-          throw "Permission to modify selected task denied: changing task owner is not supported";
-        }
-
-        if(old.owner!=user&&old.mgr_id!=user&&old.resp_id!=user){
-          throw "Permission to modify selected task denied: user isn't ownwer nor responsible for the task"
-        }
-
         chk = await pool.query("select id from users where id=$1 or pid=$2", [user,owner])
         if (chk.rowCount == 1){
           throw "Permission to modify selected task denied: new responsible is not subordinate of the caller"
         }
+        if (id==-1)
+        {
+          await pool.query("insert into tasks (owner, title, description, dt_due, priority, status, assigned_to, dt_modified, dt_created) values ($1,$2,$3,$4,$5,$6,$7,NOW(),NOW())", 
+            [owner, title, description, due_to, priority, status, resp_id])
+        }else
         if (user!=owner && user!=old.mgr_id) {
           // may only modify the status
           await pool.query("update tasks set status=$2, dt_modified=NOW() where id=$1", [id, status])
