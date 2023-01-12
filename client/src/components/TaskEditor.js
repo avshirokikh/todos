@@ -8,12 +8,9 @@ const TaskEditor = observer(({store}) => {
     return;
   const data=store.taskEditorData;
 
-  const {title, priority, dt_due, resp_name, status, overdue}=data;
+  const {title, dt_due}=data;
+//  const {title, priority, dt_due, resp_name, status, overdue}=data;
     
-  const подчиненые=store.подчиненные;
-  let due_date=formatDateTimeInput(dt_due);
-
-
   const rootClasses = [cl.myModal];
   if(store.taskEditorVisible)
     rootClasses.push(cl.active);

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import env from "react-dotenv";
+
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { observable, computed, configure, action, makeObservable, makeAutoObservable} from 'mobx';
 import { observer } from 'mobx-react';
@@ -190,6 +192,8 @@ export default function App() {
 
   return (
     <div className="wrapper container-fluid">
+    {env.port}
+
       <div className="row">
         <div className="col-sm-6">TODO list</div>
         <div className="col-sm-6" style={{textAlign:"right"}}>

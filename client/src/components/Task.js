@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import '../css/Task.css';
 
@@ -21,7 +21,6 @@ function formatDateTime(date)
 const Task = (props) => {
 //  console.log(props.data);
 
-  const [ TaskEditorVisible, setTaskEditorVisible ] = useState(false);
   const {id, title, priority, dt_due, resp_name, status, overdue}=props.data;
 
 
@@ -30,7 +29,7 @@ const Task = (props) => {
 
 
     <div className="task-list-item container p-3 my-3 border row  " onClick={()=>props.store.loadTaskEditorData(id)}>
-      <div className={"task-list-item-title col-sm-12", overdue?"overdue":(status>1?"complete":"running")} > {title} </div>
+      <div className={["task-list-item-title col-sm-12", overdue?"overdue":(status>1?"complete":"running")].join(' ')} > {title} </div>
       <div className="task-list-item-priority col-sm-4 ">Приоритет: {["низкий","средний","высокий"][priority]} </div>
       <div className="task-list-item-due col-sm-4 "> Срок: {formatDateTime(dt_due)} </div>
       <div className="task-list-item-status col-sm-4 ">Статус: {["к выполнению", "выполняется", "выполнена", "отменена"][status]} </div>
