@@ -36,12 +36,16 @@ export default function Login({token, setToken}) {
 
     let error = "";
     if (!login.loggedIn) {
-        if (login.error === "connect")
-            error = "Ошибка соединения";
-        if (login.error === "user")
-            error = "Пользователь не найден";
-        if (login.error === "password")
-            error = "Неверный пароль";
+        switch (login.error) {
+            case "connect":
+                error = "Ошибка соединения"
+                break
+            case "user":
+                error = "Пользователь не найден";
+                break
+            case "password":
+                error = "Неверный пароль";
+        }
     }
 
 
