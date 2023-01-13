@@ -1,2 +1,10 @@
-button.tasks-type { border: none; background-color:white; color: navy; }
-button.active-tasks-type { background-color:navy; color: white;}
+button.tasks-type {
+    border: none;
+    background-color: white;
+    color: navy;
+}
+
+button.active-tasks-type {
+    background-color: navy;
+    color: white;
+}
