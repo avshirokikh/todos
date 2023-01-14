@@ -106,7 +106,7 @@ class Store {
             this.setTaskEditorVisible(true);
             return;
         }
-        console.log(`fetch ${env.API_HOST}/task/${id}`)
+
         fetch(`${env.API_HOST}/task/${id}`)
             .then((resp) => resp.json())
             .then((json) => {
@@ -116,7 +116,6 @@ class Store {
     }
 
     setTaskEditorData(value) {
-        console.log(value);
         this.taskEditorData = value;
     }
 

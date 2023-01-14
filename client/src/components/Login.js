@@ -45,6 +45,8 @@ export default function Login({token, setToken}) {
                 break
             case "password":
                 error = "Неверный пароль";
+                break;
+            default:
         }
     }
 
