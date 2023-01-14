@@ -97,10 +97,16 @@ app.get("/user_tasks/:view/:user", async (req, res) => {
         let data=[];
         switch (view) {
             case "1":
-                await db.tasks_ex()
+                console.log(db.tasks_ex()
                     .where({resp_id:user})
                     .where(function(){this
                           .whereRaw('dt_due<CURRENT_DATE')
+                          .orWhere('status','<',2)})
+                    .orderBy('resp_name','asc').orderBy('dt_due','asc').toSQL().toNative());
+                await db.tasks_ex()
+                    .where({resp_id:user})
+                    .where(function(){this
+                          .whereRaw('dt_due>CURRENT_DATE')
                           .orWhere('status','<',2)})
                     .orderBy('resp_name','asc').orderBy('dt_due','asc')
                     .then(result=>{data=result})  
@@ -118,7 +124,7 @@ app.get("/user_tasks/:view/:user", async (req, res) => {
                 await db.tasks_ex()
                     .where({mgr_id:user})
                     .where(function(){this
-                          .whereRaw('dt_due<CURRENT_DATE')
+                          .whereRaw('dt_due>CURRENT_DATE')
                           .orWhere('status','<',2)})
                     .orderBy('resp_name','asc').orderBy('dt_due','asc')
                     .then(result=>{data=result})  
