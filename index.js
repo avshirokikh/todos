@@ -97,12 +97,6 @@ app.get("/user_tasks/:view/:user", async (req, res) => {
         let data=[];
         switch (view) {
             case "1":
-                console.log(db.tasks_ex()
-                    .where({resp_id:user})
-                    .where(function(){this
-                          .whereRaw('dt_due<CURRENT_DATE')
-                          .orWhere('status','<',2)})
-                    .orderBy('resp_name','asc').orderBy('dt_due','asc').toSQL().toNative());
                 await db.tasks_ex()
                     .where({resp_id:user})
                     .where(function(){this

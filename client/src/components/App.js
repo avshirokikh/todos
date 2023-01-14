@@ -179,9 +179,9 @@ export default function App() {
     store.loadSubordinates();
 
     return (
-        <div className="wrapper container-fluid">
-            <div className="row">
-                <div className="col-sm-6">TODO list</div>
+        <div className="wrapper" style={{paddingTop:"0px"}}>
+            <div className="container p-0 my-3 row" style={{padding:"0px"}}>
+                <h1 className="col-sm-6" style={{padding:"0px"},{margin:"0px"}}>TODO list</h1>
                 <div className="col-sm-6" style={{textAlign: "right"}}>
                     {login.cn}
                     <button
@@ -200,7 +200,7 @@ export default function App() {
                     </button>
                 </div>
             </div>
-            <hr/>
+            <hr style={{"margin":"0px"},{padding:"0px"}}/>
             {/*      {data.map((item)=><Task data={item} key={item.id}/>)};*/}
             <BrowserRouter>
                 <Routes>

@@ -17,20 +17,20 @@ const Tasks = observer(({store}) => {
         return store.tasksType === type ? "active-tasks-type" : ""
     }
 
-    return (<div>
-        <TaskEditor store={store}>
-        </TaskEditor>
-
+    return (
         <div>
-            <button onClick={() => store.loadTasks(1)} className={` ${active(1)} tasks-type`}>Мои задачи</button>
-            <button onClick={() => store.loadTasks(2)} className={` ${active(2)} tasks-type`}>Задачи подчиненных
-            </button>
-            <button onClick={() => store.loadTasks(3)} className={` ${active(3)} tasks-type`}>Все задачи</button>
-            <button onClick={() => store.loadTaskEditorData(-1)}>Создать задачу</button>
-        </div>
-
-        {store.tasks.map((item) => <Task data={item} key={item.id} store={store}/>)}
-    </div>)
+            <TaskEditor store={store}>
+            </TaskEditor>
+            <div className="container p-0 my-3 row" style={{"paddingLeft":"0px"}}>
+                <div className="col-sm-9" style={{"paddingLeft":"0px"}}>
+                    <button onClick={() => store.loadTasks(1)} className={` ${active(1)} tasks-type`}>Мои задачи</button>
+                    <button onClick={() => store.loadTasks(2)} className={` ${active(2)} tasks-type`}>Задачи подчиненных</button>
+                    <button onClick={() => store.loadTasks(3)} className={` ${active(3)} tasks-type`}>Все задачи</button>
+                </div>
+                <button className="col-sm-3" onClick={() => store.loadTaskEditorData(-1)}>Создать задачу</button>
+            </div>
+            {store.tasks.map((item) => <Task data={item} key={item.id} store={store}/>)}
+        </div>)
 })
 
 export default Tasks;
