@@ -84,9 +84,9 @@ const TaskEditor = observer(({store}) => {
                         <tr>
                             <td>Ответственныей</td>
                             <td>
-                                <select name="resp_id" defaultValue={data.resp_id}>
-                                    {store.subordinates.map((item) => <option value={item.id}
-                                                                              key={item.id}>{item.cn}</option>)}
+                                <select id="resp_id" name="resp_id">
+                                    {store.subordinates.map((item) => <option value={item.id} selected={data.resp_id===item.id}
+                                                                              key={item.id} >{item.cn}</option>)}
                                 </select>
                             </td>
                         </tr>
