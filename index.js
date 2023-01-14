@@ -3,6 +3,8 @@ const express = require("express")
 const app = express()
 const cors = require("cors")
 const pool = require("./db")
+const knex = require('knex');
+const db = require('./dbHelpers')
 
 //middleware
 app.use(cors())
@@ -81,6 +83,7 @@ app.get("/task/:id", async (req, res) => {
 app.get("/subordinates/:id", async (req, res) => {
     try {
         const {id} = req.params;
+
         const data = await pool.query("select id, cn, case when id=$1 then 1 else 2 end o from users_ex where pid=$1 or id=$1 order by o,cn", [id])
         res.json(data.rows)
     } catch (error) {
@@ -91,25 +94,52 @@ app.get("/subordinates/:id", async (req, res) => {
 app.get("/user_tasks/:view/:user", async (req, res) => {
     try {
         const {view, user} = req.params;
-        let data;
+        let data=[];
         switch (view) {
             case "1":
-                data = await pool.query(
-                    "select * from tasks_ex a where (status<2 or dt_due>CURRENT_DATE) and resp_id=$1 order by cat, dt_due",
-                    [user])
-                res.json(data.rows)
+                await db.tasks_ex()
+                    .where({resp_id:user})
+                    .where(function(){this
+                          .whereRaw('dt_due<CURRENT_DATE')
+                          .orWhere('status','<',2)})
+                    .orderBy('resp_name','asc').orderBy('dt_due','asc')
+                    .then(result=>{data=result})  
+//                    .catch(error=>{data=[]});
+
+                res.json(data)
                 break
             case "2":
+/*
                 data = await pool.query(
                     "select * from tasks_ex where (status<2 or dt_due>CURRENT_DATE) and mgr_id=$1 order by resp_name, dt_due",
                     [user])
                 res.json(data.rows)
+*/
+                await db.tasks_ex()
+                    .where({mgr_id:user})
+                    .where(function(){this
+                          .whereRaw('dt_due<CURRENT_DATE')
+                          .orWhere('status','<',2)})
+                    .orderBy('resp_name','asc').orderBy('dt_due','asc')
+                    .then(result=>{data=result})  
+                    .catch(error=>{z=[]});
+
+                res.json(data)
                 break
             case "3":
+/*
                 data = await pool.query(
                     "select * from tasks_ex where resp_id=$1 order by dt_modified",
                     [user])
                 res.json(data.rows)
+*/
+                await db.tasks_ex()
+                    .where({resp_id:user})
+                    .orderBy('dt_modified','asc')
+                    .then(result=>{data=result})  
+                    .catch(error=>{z=[]});
+
+                res.json(data)
                 break
         }
     } catch (error) {
