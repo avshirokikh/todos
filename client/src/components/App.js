@@ -106,7 +106,7 @@ class Store {
             this.setTaskEditorVisible(true);
             return;
         }
-
+        console.log(`fetch ${env.API_HOST}/task/${id}`)
         fetch(`${env.API_HOST}/task/${id}`)
             .then((resp) => resp.json())
             .then((json) => {
@@ -116,6 +116,7 @@ class Store {
     }
 
     setTaskEditorData(value) {
+        console.log(value);
         this.taskEditorData = value;
     }
 
@@ -174,7 +175,6 @@ export default function App() {
     if (!login.loggedIn) {
         return <Login token={login} setToken={setToken}/>
     }
-
 
     store.loadTasks(1);
     store.loadSubordinates();

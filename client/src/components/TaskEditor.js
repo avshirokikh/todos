@@ -8,6 +8,8 @@ const TaskEditor = observer(({store}) => {
         return;
     const data = store.taskEditorData;
 
+    console.log('task editor: ', data)
+
     const {title, dt_due} = data;
 
     const rootClasses = [cl.myModal];
@@ -63,21 +65,21 @@ const TaskEditor = observer(({store}) => {
                         <tr>
                             <td>Приоритет</td>
                             <td>
-                                <select id="priority" name="priority" defaultValue={data.priority}>
-                                    <option value="0">низкий</option>
-                                    <option value="1">средний</option>
-                                    <option value="2">высокий</option>
+                                <select id="priority" name="priority">
+                                    <option value="0" selected={data.priority==0}>низкий</option>
+                                    <option value="1" selected={data.priority==1}>средний</option>
+                                    <option value="2" selected={data.priority==2}>высокий</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td>Статус</td>
                             <td>
-                                <select name="status" defaultValue={data.status}>
-                                    <option value="0">к выполнению</option>
-                                    <option value="1">выполняется</option>
-                                    <option value="2">выполнена</option>
-                                    <option value="3">отменена</option>
+                                <select id="status" name="status">
+                                    <option value="0" selected={data.status==0}>к выполнению</option>
+                                    <option value="1" selected={data.status==1}>выполняется</option>
+                                    <option value="2" selected={data.status==2}>выполнена</option>
+                                    <option value="3" selected={data.status==3}>отменена</option>
                                 </select>
                             </td>
                         </tr>
