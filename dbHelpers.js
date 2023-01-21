@@ -1,25 +1,25 @@
-const db = require('./data/db');
+import database from "./data/db.js";
 
-function todo() {
-  return db('todo');
+function todo () {
+  return database("todo");
 }
 
-function users() {
-  return db('users');
+function users () {
+  return database("users");
 }
 
-function tasks() {
-  return db('tasks');
+function tasks () {
+  return database("tasks");
 }
 
-function usersEx() {
-  return db('users_ex');
+function usersEx () {
+  return database("users_ex");
 }
 
-function tasksEx() {
-  return db('tasks_ex');
+function tasksEx () {
+  return database("tasks_ex");
 }
 
-module.exports = {
+export default {
   todo, tasks, tasksEx, users, usersEx,
 };

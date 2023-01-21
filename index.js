@@ -1,23 +1,38 @@
-const express = require('express');
+import express from "express";
+
+import cors from "cors";
+
+import pool from "./db.js";
+import database from "./dbHelpers.js";
+
+import root from "./routes/root.js";
+import users from "./routes/users.js";
+import login from "./routes/login.js";
+import allTasks from "./routes/allTasks.js";
+import task from "./routes/task.js";
+
+import subordinates from "./routes/subordinates.js";
+
+import userTasks from "./routes/userTasks.js";
+
+import initDatabase from "./routes/initDatabase.js";
+
+import saveTask from "./routes/saveTask.js";
 
 const app = express();
-const cors = require('cors');
-const pool = require('./db');
-const db = require('./dbHelpers');
-
 // middleware
 app.use(cors());
 app.use(express.json());
 app.use(
-  require('./routes/root'),
-  require('./routes/users'),
-  require('./routes/login'),
-  require('./routes/all_tasks'),
-  require('./routes/task'),
-  require('./routes/subordinates'),
-  require('./routes/user_tasks'),
-  require('./routes/initdb'),
-  require('./routes/save_task'),
+  root,
+  users,
+  login,
+  allTasks,
+  task,
+  subordinates,
+  userTasks,
+  initDatabase,
+  saveTask,
 );
 
 const port = process.env.PORT;

@@ -1,15 +1,17 @@
-const router = require('express').Router();
-const pool = require('../db');
+import {Router} from "express";
+import pool from "../db.js";
 
-router.get('/subordinates/:id', async (req, res) => {
+const router = Router();
+
+router.get("/subordinates/:id", async (request, res) => {
   try {
-    const { id } = req.params;
+    const { id } = request.params;
 
-    const data = await pool.query('select id, cn, case when id=$1 then 1 else 2 end o from users_ex where pid=$1 or id=$1 order by o,cn', [id]);
+    const data = await pool.query("select id, cn, case when id=$1 then 1 else 2 end o from users_ex where pid=$1 or id=$1 order by o,cn", [id]);
     res.json(data.rows);
   } catch (error) {
     console.error(error.message);
   }
 });
 
-module.exports = router;
+export default router;

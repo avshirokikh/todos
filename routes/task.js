@@ -1,10 +1,12 @@
-const router = require('express').Router();
-const pool = require('../db');
+import {Router} from "express";
+import pool from "../db.js";
 
-router.get('/task/:id', async (req, res) => {
+const router = Router();
+
+router.get("/task/:id", async (request, res) => {
   try {
-    const { id } = req.params;
-    const data = await pool.query('select * from tasks_ex where id=$1', [id]);
+    const { id } = request.params;
+    const data = await pool.query("select * from tasks_ex where id=$1", [id]);
     res.json(data.rows[0]);
   } catch (error) {
     res.json({ error: true, errorMessage: error.message });
@@ -12,4 +14,4 @@ router.get('/task/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

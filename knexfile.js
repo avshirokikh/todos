@@ -1,9 +1,11 @@
-require('dotenv').config()
+import {config} from "dotenv";
 
-module.exports = {
+config();
+
+export default {
 
   development: {
-    client: 'pg',
+    client: "pg",
     connection: {
       port: process.env.DB_PORT,
       host: process.env.DB_HOST,
@@ -11,12 +13,12 @@ module.exports = {
       user: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
     },
-    migrations: { directory: './data/migrations', },
-    seeds: { directory: './data/seeds' },
+    migrations: { directory: "./data/migrations", },
+    seeds: { directory: "./data/seeds" },
   },
 
   testing: {
-    client: 'pg',
+    client: "pg",
     connection: {
       port: process.env.DB_PORT,
       host: process.env.DB_HOST,
@@ -24,12 +26,12 @@ module.exports = {
       user: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
     },
-    migrations: { directory: './data/migrations', },
-    seeds: { directory: './data/seeds' },
+    migrations: { directory: "./data/migrations", },
+    seeds: { directory: "./data/seeds" },
   },
 
   production: {
-    client: 'pg',
+    client: "pg",
     connection: {
       port: process.env.DB_PORT,
       host: process.env.DB_HOST,
@@ -37,8 +39,8 @@ module.exports = {
       user: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
     },
-    migrations: { directory: './data/migrations', },
-    seeds: { directory: './data/seeds' },
+    migrations: { directory: "./data/migrations", },
+    seeds: { directory: "./data/seeds" },
   },
 
 };

@@ -1,10 +1,13 @@
-const router = require('express').Router();
-const pool = require('../db');
+import {Router} from "express";
+import pool from "../db.js";
 
-router.get('/initdb', async (req, res) => {
-  await pool.query('delete from tasks');
+const router = Router();
+
+router.get("/initdb", async (request, response) => {
+  await pool.query("delete from tasks");
   await pool.query(`
-INSERT INTO public.tasks (id, title, description, dt_due, dt_created, dt_modified, priority, status, owner, assigned_to) VALUES 
+INSERT INTO public.tasks 
+(id, title, description, dt_due, dt_created, dt_modified, priority, status, owner, assigned_to) VALUES 
 (DEFAULT, 'Dir Task1', 'Dir Task1', NOW(),                      DEFAULT, DEFAULT, 2, 0, 1, 1),
 (DEFAULT, 'Dir Task2', 'Dir Task2', NOW()+interval '2 minutes', DEFAULT, DEFAULT, 2, 0, 1, 1),
 (DEFAULT, 'Dir Task3', 'Dir Task2', NOW()+interval '5 days',    DEFAULT, DEFAULT, 2, 0, 1, 1),
@@ -66,6 +69,7 @@ INSERT INTO public.tasks (id, title, description, dt_due, dt_created, dt_modifie
 (DEFAULT, 'User 2_2 Task3', 'User 2_2 Task2', NOW()+interval '5 days',    DEFAULT, DEFAULT, 2, 0, 7, 7),
 (DEFAULT, 'User 2_2 Task4', 'User 2_2 Task2', NOW()+interval '1 month',   DEFAULT, DEFAULT, 2, 0, 7, 7);
 `);
-  res.json({ ok: true });
+  response.json({ ok: true });
 });
-module.exports = router;
+
+export default router;
