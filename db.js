@@ -1,18 +1,21 @@
 require('dotenv').config();
 
-const dbUsername = process.env.DB_USERNAME;
-const dbPassword = process.env.DB_PASSWORD;
-const dbDatabase = process.env.DB_DATABASE;
+const {
+  DB_USERNAME: dbUsername,
+  DB_PASSWORD: dbPassword,
+  DB_DATABASE: dbDatabase,
+  DB_HOST: dbHost,
+  DB_PORT: dbPort,
+} = process.env;
 
-const dbHost = process.env.DB_HOST;
-const dbPort = process.env.DB_PORT;
+const { Pool } = require('pg');
 
-const Pool = require("pg").Pool
 const pool = new Pool({
-    user: dbUsername,
-    password: dbPassword,
-    database: dbDatabase,
-    host: dbHost,
-    port: dbPort,
-})
+  user: dbUsername,
+  password: dbPassword,
+  database: dbDatabase,
+  host: dbHost,
+  port: dbPort,
+});
+
 module.exports = pool;

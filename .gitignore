@@ -4,3 +4,4 @@
 /node_modules
 .idea
 commit
+.eslintrc.json
