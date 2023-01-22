@@ -39,7 +39,7 @@ export default function App () {
         </div>
         <hr className="p-0 m-0"/>
       </div>
-      {/*      {data.map((item)=><Task data={item} key={item.id}/>)};*/}
+      
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Tasks store={store}/>}/>
