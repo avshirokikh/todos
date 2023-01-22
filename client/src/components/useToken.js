@@ -1,20 +1,20 @@
 import {useState} from "react";
 
-export default function useToken () {
-
-  const getToken = () => {
-    let result = {loggedIn: false, error: "", id: -1, logon: "", ln: "", fn: "", mn: "", cn: ""};
-    try {
-      const tokenString = sessionStorage.getItem("token");
-      if (tokenString) {
-        result = JSON.parse(tokenString);
-      }
-    } catch (error) {
-      console.error(error);
+const getToken = () => {
+  let result = {loggedIn: false, error: "", id: -1, logon: "", ln: "", fn: "", mn: "", cn: ""};
+  try {
+    const tokenString = sessionStorage.getItem("token");
+    if (tokenString) {
+      result = JSON.parse(tokenString);
     }
-    
-    return result;
-  };
+  } catch (error) {
+    console.error(error);
+  }
+
+  return result;
+};
+
+export default function useToken () {
 
   const value = getToken();
 

@@ -18,7 +18,6 @@ class Store {
     makeObservable(this, {
       tasks: observable,
       tasksType: observable,
-      tasksTitle: computed,
 
       setTasks: action,
       setTasksType: action,
@@ -35,23 +34,6 @@ class Store {
       setTaskEditorVisible: action,
     });
 
-  }
-
-  get tasksTitle () {
-    switch (this.tasksType) {
-    case 1: {
-      return "Мои задачи";
-    }
-    case 2: {
-      return "Задачи подчиненных";
-    }
-    case 3: {
-      return "Все задачи";
-    }
-    default: {
-      return "Неизвестный тип задач";
-    }
-    }
   }
 
   taskEditorVisible = false;
@@ -89,7 +71,7 @@ class Store {
       body: JSON.stringify(task)
     })
       .then((resp) => resp.json())
-      .then((json) => {
+      .then(() => {
         this.updateTasks();
       });
   }
