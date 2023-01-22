@@ -1,8 +1,8 @@
 import React from 'react';
 import {observer} from 'mobx-react';
 
-import Task from './Task';
-import TaskEditor from './TaskEditor';
+import Task from './task';
+import TaskEditor from './taskEditor';
 
 
 import '../css/Tasks.css';

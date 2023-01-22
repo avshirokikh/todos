@@ -1,15 +1,15 @@
 import {Router} from "express";
-import pool from "../db.js";
+import {tasksEx} from "../dbHelpers.js";
 
 const router = Router();
 
 router.get("/task/:id", async (request, res) => {
   try {
-    const { id } = request.params;
-    const data = await pool.query("select * from tasks_ex where id=$1", [id]);
-    res.json(data.rows[0]);
+    const id = Number.parseInt(request.params.id);
+    const data = await tasksEx().where("id", id);
+    res.json(data[0]);
   } catch (error) {
-    res.json({ error: true, errorMessage: error.message });
+    res.json({error: true, errorMessage: error.message});
     console.error(error.message);
   }
 });

@@ -2,6 +2,7 @@
 
 import {Router} from "express";
 import pool from "../db.js";
+import {tasks, dbe, tasksEx, users} from "../dbHelpers.js";
 
 const router = Router();
 router.post("/save-task/:user", async (request, response) => {
@@ -21,19 +22,20 @@ router.post("/save-task/:user", async (request, response) => {
 
 
     if (id !== -1) {
-      chk = await pool.query("select owner, resp_id respId, mgr_id mgrId from tasks_ex where id=$1", [id]);
-      old = {
-        owner: chk.rows[0].owner,
-        respId: chk.rows[0].respId,
-        mgrId: chk.rows[0].mgrId,
-      };
-      if (chk.rowCount !== 1) {
+      chk=await tasksEx().select({owner:"owner", respId:"resp_id", mgrId:"mgr_id"})
+        .where({id:id});
+      if (chk.length !== 1) {
         throw ("Task not found");
       }
+      old = {
+        owner: chk[0].owner,
+        respId: chk[0].respId,
+        mgrId: chk[0].mgrId,
+      };
 
       if (owner !== user && respId !== user && old.mgrId !== user) {
         throw (`Permission to modify selected task denied: user isn't owner nor is responsible for the task
-        typeof(user)
+        ${owner} ${user} ${respId} ${old.mgrId}
         `);
       }
 
@@ -50,27 +52,51 @@ router.post("/save-task/:user", async (request, response) => {
         throw "Permission to modify selected task denied: user isn't owner nor responsible for the task";
       }
     }
-    chk = await pool.query("select id from users where id=$1 or pid=$2", [user, owner]);
+    chk = await users().select("id")
+      .where({id:user, pid:owner});
+
     if (chk.rowCount === 1) {
       throw "Permission to modify selected task denied: new responsible is not subordinate of the caller";
     }
     if (id === -1) {
-      await pool.query(
-        "insert into tasks" +
-                "(owner, title, description, dt_due, priority, status, assigned_to, dt_modified, dt_created)" +
-                "values ($1,$2,$3,$4,$5,$6,$7,NOW(),NOW())",
-        [owner, title, description, dueTo, priority, status, respId],
-      );
+      await tasks().insert({
+        owner:owner,
+        title:title,
+        description:description,
+        // eslint-disable-next-line camelcase
+        dt_due:dueTo,
+        priority:priority,
+        status:status,
+        // eslint-disable-next-line camelcase
+        assigned_to:respId,
+        // eslint-disable-next-line camelcase
+        dt_modified:dbe.raw("now()"),
+        // eslint-disable-next-line camelcase
+        dt_created:dbe.raw("now()")});
     } else if (user !== owner && user !== old.mgrId) {
       // may only modify the status
-      await pool.query("update tasks set status=$2, dt_modified=NOW() where id=$1", [id, status]);
+      await tasks().update({
+        status:status,
+        // eslint-disable-next-line camelcase
+        dt_modified:dbe.raw("now()")})
+        .where({id:id});
+
     } else {
       // may modify all task attributes
-      await pool.query(
-        "update tasks set owner=$2, title=$3, description=$4, dt_due=$5, priority=$6, status=$7, assigned_to=$8, " +
-                "dt_modified=NOW() where id=$1",
-        [id, owner, title, description, dueTo, priority, status, respId],
-      );
+      await tasks().update({
+        owner:owner,
+        title:title,
+        description:description,
+        // eslint-disable-next-line camelcase
+        dt_due:dueTo,
+        priority:priority,
+        status:status,
+        // eslint-disable-next-line camelcase
+        assigned_to:respId,
+        // eslint-disable-next-line camelcase
+        dt_modified:dbe.raw("now()")})
+        .where({id:id});
+
     }
 
     response.json({error: false});

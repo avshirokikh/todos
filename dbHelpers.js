@@ -1,25 +1,28 @@
 import database from "./data/db.js";
+export const dbe=database;
 
-function todo () {
+
+
+export function todo () {
   return database("todo");
 }
 
-function users () {
+export function users () {
   return database("users");
 }
 
-function tasks () {
+export function tasks () {
   return database("tasks");
 }
 
-function usersEx () {
+export function usersEx () {
   return database("users_ex");
 }
 
-function tasksEx () {
+export function tasksEx () {
   return database("tasks_ex");
 }
 
 export default {
-  todo, tasks, tasksEx, users, usersEx,
+  todo, tasks, tasksEx, users, usersEx, dbe
 };

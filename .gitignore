@@ -6,3 +6,4 @@
 .idea
 commit
 .eslintrc.json
+.eslintrc.cjs

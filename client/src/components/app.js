@@ -2,10 +2,10 @@ import React from 'react';
 
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
-import Tasks from './Tasks';
-import Login from './Login';
+import Tasks from './tasks';
+import Login from './login';
 import useToken from './useToken';
-import Store from './Store';
+import Store from './store';
 
 import '../css/App.css';
 
@@ -24,9 +24,9 @@ export default function App() {
     store.loadSubordinates();
 
     return (
-        <div className="wrapper" style={{paddingTop:"0px"}}>
-            <div className="container p-0 my-3 row" style={{padding:"0px"}}>
-                <h1 className="col-sm-6" style={{padding:"0px"},{margin:"0px"}}>TODO list</h1>
+        <div className="wrapper" style={{paddingTop: "0px"}}>
+            <div className="container p-0 my-3 row" style={{padding: "0px"}}>
+                <h1 className="col-sm-6" style={{padding: "0px"},{margin:"0px"}}>TODO list</h1>
                 <div className="col-sm-6" style={{textAlign: "right"}}>
                     {login.cn}
                     <button
@@ -45,7 +45,7 @@ export default function App() {
                     </button>
                 </div>
             </div>
-            <hr style={{"margin":"0px"},{padding:"0px"}}/>
+            <hr style={{"margin": "0px"},{padding:"0px"}}/>
             {/*      {data.map((item)=><Task data={item} key={item.id}/>)};*/}
             <BrowserRouter>
                 <Routes>

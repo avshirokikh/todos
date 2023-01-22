@@ -6,7 +6,6 @@ import pool from "./db.js";
 import database from "./dbHelpers.js";
 
 import root from "./routes/root.js";
-import users from "./routes/users.js";
 import login from "./routes/login.js";
 import allTasks from "./routes/allTasks.js";
 import task from "./routes/task.js";
@@ -25,7 +24,6 @@ app.use(cors());
 app.use(express.json());
 app.use(
   root,
-  users,
   login,
   allTasks,
   task,

@@ -1,14 +1,24 @@
 import React from 'react';
 import {observer} from 'mobx-react';
 
-import cl from './TaskEditor.module.css';
+import cl from './taskEditor.module.css';
 
 const TaskEditor = observer(({store}) => {
     if (!store)
         return;
-    const data = store.taskEditorData;
+    let data = store.taskEditorData;
 
     const {title, dt_due} = data;
+
+    function setRespId(value){
+        store.setTaskEditorDataRespId(value);
+    }
+    function setStatus(value){
+        store.setTaskEditorDataStatus(value);
+    }
+    function setPriority(value){
+        store.setTaskEditorDataPriority(value);
+    }
 
     const rootClasses = [cl.myModal];
     if (store.taskEditorVisible) rootClasses.push(cl.active);
@@ -63,29 +73,34 @@ const TaskEditor = observer(({store}) => {
                         <tr>
                             <td>Приоритет</td>
                             <td>
-                                <select id="priority" name="priority">
-                                    <option value="0" selected={data.priority===0}>низкий</option>
-                                    <option value="1" selected={data.priority===1}>средний</option>
-                                    <option value="2" selected={data.priority===2}>высокий</option>
+                                <select id="priority" name="priority"
+                                        value={data.priority}
+                                        onChange={e => setPriority(e.target.value)}>
+                                    <option value="0" >низкий</option>
+                                    <option value="1" >средний</option>
+                                    <option value="2" >высокий</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td>Статус</td>
                             <td>
-                                <select id="status" name="status">
-                                    <option value="0" selected={data.status===0}>к выполнению</option>
-                                    <option value="1" selected={data.status===1}>выполняется</option>
-                                    <option value="2" selected={data.status===2}>выполнена</option>
-                                    <option value="3" selected={data.status===3}>отменена</option>
+                                <select id="status" name="status"
+                                    value={data.status}
+                                    onChange={e => setStatus(e.target.value)}>
+                                    <option value="0" >к выполнению</option>
+                                    <option value="1" >выполняется</option>
+                                    <option value="2" >выполнена</option>
+                                    <option value="3" >отменена</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
-                            <td>Ответственныей</td>
+                            <td>Ответственный</td>
                             <td>
-                                <select id="resp_id" name="resp_id">
-                                    {store.subordinates.map((item) => <option value={item.id} selected={data.resp_id===item.id}
+                                <select id="resp_id" name="resp_id" value={data.resp_id}
+                                        onChange={e => setRespId(e.target.value)}>
+                                    {store.subordinates.map((item) => <option value={item.id}
                                                                               key={item.id} >{item.cn}</option>)}
                                 </select>
                             </td>

@@ -1,11 +1,11 @@
 import {Router} from "express";
 import pool from "../db.js";
+import {tasks} from "../dbHelpers.js";
 
 const router = Router();
 router.get("/all_tasks", async (request, response) => {
   try {
-    const data = await pool.query("select * from tasks");
-    response.json(data.rows);
+    response.json(await tasks());
   } catch (error) {
     console.error(error.message);
   }

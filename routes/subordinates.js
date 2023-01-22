@@ -1,14 +1,15 @@
-import {Router} from "express";
-import pool from "../db.js";
+import bde, {Router} from "express";
+import {dbe} from "../dbHelpers.js";
 
 const router = Router();
 
-router.get("/subordinates/:id", async (request, res) => {
+router.get("/subordinates/:id", async (request, response) => {
   try {
-    const { id } = request.params;
-
-    const data = await pool.query("select id, cn, case when id=$1 then 1 else 2 end o from users_ex where pid=$1 or id=$1 order by o,cn", [id]);
-    res.json(data.rows);
+    const id = Number.parseInt(request.params.id);
+    const data = await dbe.raw(
+      "select id, cn, case when id=:id then 1 else 2 end o from users_ex where pid=:id or id=:id order by o,cn",
+      {id});
+    response.json(data.rows);
   } catch (error) {
     console.error(error.message);
   }
