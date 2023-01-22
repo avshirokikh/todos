@@ -26,7 +26,7 @@ export default function useToken () {
       const tokenString = JSON.stringify(userToken);
       sessionStorage.setItem("token", tokenString);
       setToken(userToken);
-      
+
       return;
     }
     setToken(getToken());

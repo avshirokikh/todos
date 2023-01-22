@@ -1,13 +1,12 @@
 import env from "react-dotenv";
-
-import {action, computed, configure, makeObservable, observable} from "mobx";
+import {action, configure, makeObservable, observable} from "mobx";
 
 configure({enforceActions: "observed"});
 
 class Store {
 
   tasks = [];
-    
+
   tasksType = 1;
 
   subordinates = [];
@@ -55,7 +54,6 @@ class Store {
     this.taskEditorData.status = value;
   }
 
-
   taskEditorData = {};
 
   saveTask (task) {
@@ -75,7 +73,6 @@ class Store {
         this.updateTasks();
       });
   }
-
 
   blankTaskEditorData () {
     const now = new Date();
@@ -105,7 +102,7 @@ class Store {
     if (id === -1) {
       this.setTaskEditorData(this.blankTaskEditorData());
       this.setTaskEditorVisible(true);
-      
+
       return;
     }
 
@@ -148,7 +145,6 @@ class Store {
     this.tasks = value;
   }
 
-
   setSubordinates (value) {
     this.subordinates = value;
   }
@@ -164,7 +160,6 @@ class Store {
         this.setSubordinates(json);
       });
   }
-
 
 }
 

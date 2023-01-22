@@ -3,10 +3,7 @@ import {observer} from "mobx-react";
 
 import Task from "./task";
 import TaskEditor from "./taskEditor";
-
-
 import "../css/Tasks.css";
-
 
 const Tasks = observer(({store}) => {
   if (store === undefined) {

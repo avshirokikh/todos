@@ -51,7 +51,6 @@ export default function Login ({token, setToken}) {
     }
   }
 
-
   return (
     <div className="container">
       <div id="login-row" className="row justify-content-center align-items-center">

@@ -35,7 +35,6 @@ const TaskEditor = observer(({store}) => {
     rootClasses.push(cl.active);
   }
 
-
   const saveTask = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target.form);

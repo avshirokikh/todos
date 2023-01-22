@@ -1,8 +1,6 @@
 import database from "./data/db.js";
 export const dbe=database;
 
-
-
 export function todo () {
   return database("todo");
 }

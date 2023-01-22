@@ -20,7 +20,6 @@ router.get("/user_tasks/:view/:user", async (request, response) => {
         .then((result) => {
           data = result; 
         });
-      //                    .catch(error=>{data=[]});
 
       response.json(data);
       break;

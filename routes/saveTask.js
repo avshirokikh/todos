@@ -20,7 +20,6 @@ router.post("/save-task/:user", async (request, response) => {
     status = Number.parseInt(status);
     respId = Number.parseInt(respId);
 
-
     if (id !== -1) {
       chk=await tasksEx().select({owner:"owner", respId:"resp_id", mgrId:"mgr_id"})
         .where({id:id});

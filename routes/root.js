@@ -1,6 +1,7 @@
 import {Router} from "express";
 
 const router = Router();
+
 // get all users
 router.get("/", async (request, response) => {
   try {

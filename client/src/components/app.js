@@ -1,12 +1,10 @@
 import React from "react";
-
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 import Tasks from "./tasks";
 import Login from "./login";
 import useToken from "./useToken";
 import Store from "./store";
-
 import "../css/App.css";
 
 const store = new Store();
@@ -39,16 +37,14 @@ export default function App () {
         </div>
         <hr className="p-0 m-0"/>
       </div>
-      
+
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Tasks store={store}/>}/>
         </Routes>
       </BrowserRouter>
 
-
     </div>
   );
 }
-
 
